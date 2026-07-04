@@ -1,0 +1,1212 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="AIxSA Compass / DX伴走サブスクリプション — 中小企業のためのAI/DX導入・運用パートナー。月額固定で、専任スタッフがツール選定から運用まで伴走します。" />
+  <title>AIxSA Compass / DX伴走サブスクリプション</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&family=IBM+Plex+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      /* Cyber palette (hero / contact) */
+      --cyber-bg: #04070b;
+      --cyber-bg-2: #0a1118;
+      --cyber-fg: #d9f4f7;
+      --cyber-fg-dim: rgba(217, 244, 247, 0.56);
+      --cyber-accent: #7df0ff;
+      --cyber-line: rgba(159, 247, 255, 0.14);
+      --cyber-glow: rgba(125, 240, 255, 0.30);
+
+      /* Content palette (intro / plans) */
+      --bg: #f7f9fb;
+      --bg-alt: #ffffff;
+      --fg: #1a2533;
+      --fg-mid: #4a5868;
+      --fg-dim: #7a8696;
+      --line: #e3e8ee;
+      --accent: #0891a8;
+      --accent-strong: #066073;
+      --accent-soft: #e6f6f9;
+      --highlight: #ffb44a;
+      --highlight-soft: #fff5e3;
+
+      --radius: 6px;
+      --mono: "IBM Plex Mono", "SF Mono", "Roboto Mono", "Menlo", monospace;
+      --sans: "Noto Sans JP", -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic", sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      font-family: var(--sans);
+      color: var(--fg);
+      background: var(--bg);
+      line-height: 1.75;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* ================================================
+       NAV (sticky)
+       ================================================ */
+    .nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      background: rgba(247, 249, 251, 0.82);
+      border-bottom: 1px solid var(--line);
+      transition: background 0.3s, border-color 0.3s;
+    }
+    .nav.at-top {
+      background: rgba(4, 7, 11, 0.55);
+      border-bottom: 1px solid var(--cyber-line);
+    }
+    .nav-inner {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 14px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .nav-logo {
+      font-family: var(--mono);
+      font-weight: 500;
+      font-size: 16px;
+      letter-spacing: 0.16em;
+      color: var(--fg);
+      transition: color 0.3s;
+    }
+    .nav.at-top .nav-logo { color: var(--cyber-fg); }
+    .nav-logo .x { color: var(--accent); transition: color 0.3s; }
+    .nav.at-top .nav-logo .x { color: var(--cyber-accent); }
+    .nav-links {
+      display: flex;
+      gap: 28px;
+      font-size: 13px;
+      letter-spacing: 0.08em;
+    }
+    .nav-links a {
+      color: var(--fg-mid);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .nav.at-top .nav-links a { color: var(--cyber-fg-dim); }
+    .nav-links a:hover { color: var(--accent); }
+    .nav.at-top .nav-links a:hover { color: var(--cyber-accent); }
+    @media (max-width: 720px) { .nav-links { display: none; } }
+
+    /* ================================================
+       HERO (cyber — subtle)
+       ================================================ */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      background: radial-gradient(ellipse 80% 60% at 50% 45%, var(--cyber-bg-2) 0%, var(--cyber-bg) 60%, #010203 100%);
+      color: var(--cyber-fg);
+      overflow: hidden;
+      isolation: isolate;
+      font-family: var(--mono);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 24px;
+    }
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(
+        to bottom,
+        rgba(255,255,255,0.015) 0px,
+        rgba(255,255,255,0.015) 1px,
+        transparent 2px,
+        transparent 4px
+      );
+      mix-blend-mode: screen;
+      opacity: 0.6;
+      pointer-events: none;
+      animation: scanMove 10s linear infinite;
+    }
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: -10%;
+      background:
+        radial-gradient(circle at 18% 20%, rgba(125, 240, 255, 0.08), transparent 28%),
+        radial-gradient(circle at 82% 72%, rgba(125, 240, 255, 0.06), transparent 34%);
+      filter: blur(2px);
+      pointer-events: none;
+      opacity: 0.85;
+    }
+
+    /* Compass glyph — abstract silver light mark behind the hero text.
+       5s entrance only, then completely static (0% CPU).
+       Positioned between the "Compass" title and the "「何から〜」" tagline. */
+    .compass-glyph {
+      position: absolute;
+      top: 44%;
+      left: 50%;
+      width: clamp(420px, 72vw, 760px);
+      height: clamp(420px, 72vw, 760px);
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+      z-index: 1;
+      opacity: 0;
+      mix-blend-mode: screen;
+      animation: compassFadeIn 5s ease-out forwards;
+    }
+    .compass-glyph svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+      transform-origin: center;
+      animation: compassSettle 5s ease-out forwards;
+      filter: drop-shadow(0 0 18px rgba(212, 220, 232, 0.32));
+    }
+    @keyframes compassFadeIn {
+      0%   { opacity: 0; }
+      30%  { opacity: 0.62; }
+      70%  { opacity: 0.48; }
+      100% { opacity: 0.55; }
+    }
+    @keyframes compassSettle {
+      0%   { transform: scale(0.86); }
+      40%  { transform: scale(1.03); }
+      100% { transform: scale(1); }
+    }
+
+    .hero-frame {
+      position: relative;
+      width: 100%;
+      max-width: 980px;
+      z-index: 2;
+      padding: 60px 0;
+    }
+
+    /* Top status bar */
+    .hero-topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      color: var(--cyber-fg-dim);
+      text-transform: uppercase;
+      margin-bottom: 60px;
+    }
+    .hero-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .hero-status::before {
+      content: "";
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: var(--cyber-accent);
+      box-shadow: 0 0 10px var(--cyber-accent);
+      animation: pulse 1.6s ease-in-out infinite;
+    }
+
+    /* Corner brackets */
+    .hero-corner {
+      position: absolute;
+      width: 28px; height: 28px;
+      border-color: var(--cyber-line);
+      opacity: 0.85;
+    }
+    .hero-corner.tl { top: 24px; left: 24px; border-top: 1px solid var(--cyber-accent); border-left: 1px solid var(--cyber-accent); }
+    .hero-corner.tr { top: 24px; right: 24px; border-top: 1px solid var(--cyber-accent); border-right: 1px solid var(--cyber-accent); }
+    .hero-corner.bl { bottom: 24px; left: 24px; border-bottom: 1px solid var(--cyber-accent); border-left: 1px solid var(--cyber-accent); }
+    .hero-corner.br { bottom: 24px; right: 24px; border-bottom: 1px solid var(--cyber-accent); border-right: 1px solid var(--cyber-accent); }
+
+    .hero-meta {
+      font-size: 11px;
+      color: var(--cyber-fg-dim);
+      letter-spacing: 0.20em;
+      text-transform: uppercase;
+      margin-bottom: 18px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .hero-meta::before, .hero-meta::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--cyber-line), transparent);
+      max-width: 80px;
+    }
+    .hero-meta .x {
+      color: var(--cyber-accent);
+      font-weight: 300;
+      margin: 0 0.05em;
+    }
+
+    .hero-title {
+      font-family: var(--mono);
+      font-size: clamp(40px, 7vw, 88px);
+      font-weight: 400;
+      letter-spacing: 0.04em;
+      line-height: 1.0;
+      margin: 0 0 8px;
+      text-align: center;
+      color: var(--cyber-fg);
+      text-shadow:
+        0 0 12px rgba(125, 240, 255, 0.35),
+        0 0 32px rgba(125, 240, 255, 0.12);
+    }
+    .hero-title .x {
+      color: var(--cyber-accent);
+      font-weight: 300;
+      animation: softGlow 3.2s ease-in-out infinite;
+    }
+
+    .hero-sub-en {
+      font-family: var(--mono);
+      font-size: clamp(11px, 1.2vw, 15px);
+      letter-spacing: 0.32em;
+      text-transform: uppercase;
+      color: var(--cyber-fg-dim);
+      text-align: center;
+      margin: 0 0 36px;
+    }
+
+    .hero-tagline {
+      font-family: var(--sans);
+      font-size: clamp(16px, 2.1vw, 22px);
+      font-weight: 300;
+      letter-spacing: 0.08em;
+      line-height: 1.7;
+      color: rgba(217, 244, 247, 0.88);
+      text-align: center;
+      margin: 0 0 48px;
+    }
+    .hero-tagline strong {
+      font-weight: 500;
+      color: var(--cyber-fg);
+    }
+
+    .hero-divider {
+      width: 120px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--cyber-accent), transparent);
+      margin: 0 auto 36px;
+      opacity: 0.6;
+    }
+
+    .hero-pitch {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      max-width: 720px;
+      margin: 0 auto 56px;
+    }
+    .hero-pitch-item {
+      border: 1px solid var(--cyber-line);
+      padding: 16px 14px;
+      text-align: center;
+      background: rgba(125, 240, 255, 0.025);
+    }
+    .hero-pitch-item b {
+      display: block;
+      color: var(--cyber-accent);
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.20em;
+      margin-bottom: 6px;
+      font-weight: 400;
+    }
+    .hero-pitch-item span {
+      font-family: var(--sans);
+      font-size: 12px;
+      letter-spacing: 0.04em;
+      color: var(--cyber-fg-dim);
+    }
+
+    .hero-cta-row {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .hero-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 28px;
+      font-family: var(--mono);
+      font-size: 13px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      text-decoration: none;
+      color: var(--cyber-bg);
+      background: var(--cyber-accent);
+      border: 1px solid var(--cyber-accent);
+      transition: all 0.2s;
+      cursor: pointer;
+    }
+    .hero-cta:hover {
+      background: var(--cyber-fg);
+      border-color: var(--cyber-fg);
+      box-shadow: 0 0 24px var(--cyber-glow);
+    }
+    .hero-cta.ghost {
+      background: transparent;
+      color: var(--cyber-fg);
+      border-color: var(--cyber-line);
+    }
+    .hero-cta.ghost:hover {
+      background: rgba(125, 240, 255, 0.08);
+      border-color: var(--cyber-accent);
+      color: var(--cyber-accent);
+      box-shadow: none;
+    }
+
+    /* Scroll hint */
+    .scroll-hint {
+      position: absolute;
+      bottom: 36px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 0.32em;
+      text-transform: uppercase;
+      color: var(--cyber-fg-dim);
+      animation: bounceY 2.4s ease-in-out infinite;
+      z-index: 2;
+    }
+    .scroll-hint::after {
+      content: "";
+      display: block;
+      width: 1px;
+      height: 20px;
+      background: var(--cyber-accent);
+      margin: 8px auto 0;
+      opacity: 0.6;
+    }
+
+    @media (max-width: 600px) {
+      .hero-pitch { grid-template-columns: 1fr; gap: 10px; }
+      .hero-topbar { font-size: 10px; margin-bottom: 40px; }
+    }
+
+    /* ================================================
+       CONTENT SECTIONS
+       ================================================ */
+    section { padding: 96px 24px; }
+    .container { max-width: 1080px; margin: 0 auto; }
+
+    .section-label {
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin: 0 0 12px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .section-label::before {
+      content: "";
+      width: 24px; height: 1px;
+      background: var(--accent);
+    }
+    .section-title {
+      font-size: clamp(28px, 4vw, 40px);
+      font-weight: 700;
+      line-height: 1.4;
+      letter-spacing: 0.02em;
+      margin: 0 0 24px;
+      color: var(--fg);
+    }
+    .section-lead {
+      font-size: 16px;
+      line-height: 1.9;
+      color: var(--fg-mid);
+      max-width: 720px;
+      margin: 0 0 48px;
+    }
+
+    /* ================================================
+       INTRO — 3つのお伝えしたいこと
+       ================================================ */
+    .intro {
+      background: var(--bg-alt);
+      border-bottom: 1px solid var(--line);
+    }
+    .intro-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      margin-top: 8px;
+    }
+    .intro-card {
+      padding: 32px 28px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--bg-alt);
+      transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+    }
+    .intro-card:hover {
+      transform: translateY(-2px);
+      border-color: var(--accent);
+      box-shadow: 0 8px 24px rgba(8, 145, 168, 0.08);
+    }
+    .intro-num {
+      font-family: var(--mono);
+      font-size: 12px;
+      letter-spacing: 0.18em;
+      color: var(--accent);
+      margin-bottom: 12px;
+    }
+    .intro-card h3 {
+      font-size: 18px;
+      font-weight: 700;
+      margin: 0 0 12px;
+      line-height: 1.5;
+    }
+    .intro-card p {
+      margin: 0;
+      font-size: 14px;
+      line-height: 1.8;
+      color: var(--fg-mid);
+    }
+    @media (max-width: 800px) { .intro-grid { grid-template-columns: 1fr; } }
+
+    /* ================================================
+       PRINCIPLES — 私たちの考え方
+       ================================================ */
+    .principles { background: var(--bg); }
+    .principles-list {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px 48px;
+      margin-top: 16px;
+    }
+    .principle-item {
+      padding-left: 24px;
+      border-left: 2px solid var(--accent);
+    }
+    .principle-item h4 {
+      font-size: 18px;
+      font-weight: 700;
+      margin: 0 0 10px;
+      color: var(--fg);
+    }
+    .principle-item p {
+      margin: 0;
+      font-size: 14px;
+      line-height: 1.85;
+      color: var(--fg-mid);
+    }
+    @media (max-width: 800px) { .principles-list { grid-template-columns: 1fr; gap: 28px; } }
+
+    /* ================================================
+       PLANS
+       ================================================ */
+    .plans {
+      background: var(--bg-alt);
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+    }
+    .plans-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      margin-top: 16px;
+    }
+    .plan-card {
+      position: relative;
+      padding: 36px 28px 32px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--bg-alt);
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .plan-card:hover { transform: translateY(-3px); box-shadow: 0 12px 32px rgba(26, 37, 51, 0.08); }
+    .plan-card.featured {
+      border: 2px solid var(--accent);
+      background: linear-gradient(180deg, var(--accent-soft), var(--bg-alt) 40%);
+      box-shadow: 0 8px 32px rgba(8, 145, 168, 0.12);
+    }
+    .plan-card.featured::before {
+      content: "おすすめ";
+      position: absolute;
+      top: -12px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--accent);
+      color: white;
+      padding: 4px 16px;
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      border-radius: 12px;
+    }
+
+    .plan-name {
+      font-family: var(--mono);
+      font-size: 13px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin: 0 0 6px;
+    }
+    .plan-tagline {
+      font-size: 13px;
+      color: var(--fg-mid);
+      margin: 0 0 24px;
+      line-height: 1.6;
+      min-height: 42px;
+    }
+
+    .plan-price {
+      display: flex;
+      align-items: baseline;
+      gap: 4px;
+      margin-bottom: 4px;
+    }
+    .plan-price-num {
+      font-family: var(--mono);
+      font-size: 38px;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+      color: var(--fg);
+    }
+    .plan-price-unit {
+      font-size: 13px;
+      color: var(--fg-mid);
+    }
+    .plan-price-tax {
+      font-size: 11px;
+      color: var(--fg-dim);
+      margin-bottom: 8px;
+    }
+
+    .plan-subsidy {
+      margin: 14px 0 24px;
+      padding: 12px 14px;
+      background: var(--highlight-soft);
+      border-left: 3px solid var(--highlight);
+      border-radius: 0 4px 4px 0;
+      font-size: 12px;
+      line-height: 1.65;
+      color: var(--fg);
+    }
+    .plan-subsidy.empty {
+      visibility: hidden;
+    }
+    .plan-subsidy b {
+      display: block;
+      font-size: 16px;
+      color: var(--fg);
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      margin-top: 2px;
+    }
+    .plan-subsidy small {
+      display: block;
+      color: var(--fg-dim);
+      font-size: 10.5px;
+      margin-top: 4px;
+      letter-spacing: 0.02em;
+    }
+
+    .plan-features {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 28px;
+      flex: 1;
+    }
+    .plan-features li {
+      padding: 8px 0 8px 24px;
+      border-top: 1px dashed var(--line);
+      font-size: 13.5px;
+      line-height: 1.65;
+      color: var(--fg-mid);
+      position: relative;
+    }
+    .plan-features li::before {
+      content: "✓";
+      position: absolute;
+      left: 0;
+      top: 8px;
+      color: var(--accent);
+      font-weight: 700;
+    }
+    .plan-features li.disabled {
+      color: var(--fg-dim);
+      opacity: 0.5;
+    }
+    .plan-features li.disabled::before {
+      content: "—";
+      color: var(--fg-dim);
+    }
+
+    .plan-cta {
+      display: block;
+      text-align: center;
+      padding: 12px;
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-decoration: none;
+      color: var(--accent-strong);
+      background: transparent;
+      border: 1px solid var(--accent);
+      border-radius: var(--radius);
+      transition: all 0.2s;
+    }
+    .plan-cta:hover {
+      background: var(--accent);
+      color: white;
+    }
+    .plan-card.featured .plan-cta {
+      background: var(--accent);
+      color: white;
+    }
+    .plan-card.featured .plan-cta:hover {
+      background: var(--accent-strong);
+      border-color: var(--accent-strong);
+    }
+    @media (max-width: 900px) { .plans-grid { grid-template-columns: 1fr; gap: 32px; } .plan-subsidy.empty { display: none; } }
+
+    /* ================================================
+       SUBSIDY note
+       ================================================ */
+    .subsidy-note {
+      max-width: 900px;
+      margin: 48px auto 0;
+      padding: 24px 28px;
+      background: var(--bg);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      font-size: 13px;
+      line-height: 1.8;
+      color: var(--fg-mid);
+    }
+    .subsidy-note b { color: var(--fg); font-weight: 700; }
+
+    /* ================================================
+       CONTACT (cyber)
+       ================================================ */
+    .contact {
+      background: radial-gradient(ellipse 80% 60% at 50% 45%, var(--cyber-bg-2) 0%, var(--cyber-bg) 60%, #010203 100%);
+      color: var(--cyber-fg);
+      position: relative;
+      overflow: hidden;
+      isolation: isolate;
+    }
+    .contact::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(
+        to bottom,
+        rgba(255,255,255,0.012) 0px,
+        rgba(255,255,255,0.012) 1px,
+        transparent 2px,
+        transparent 4px
+      );
+      mix-blend-mode: screen;
+      opacity: 0.5;
+      pointer-events: none;
+    }
+    .contact .section-label { color: var(--cyber-accent); }
+    .contact .section-label::before { background: var(--cyber-accent); }
+    .contact .section-title { color: var(--cyber-fg); }
+    .contact .section-lead { color: var(--cyber-fg-dim); }
+
+    .contact-inner {
+      max-width: 880px;
+      margin: 0 auto;
+      text-align: center;
+      position: relative;
+      z-index: 2;
+    }
+    .contact .section-lead { margin-left: auto; margin-right: auto; }
+
+    .contact-points {
+      display: flex;
+      justify-content: center;
+      gap: 36px;
+      margin: 12px 0 48px;
+      flex-wrap: wrap;
+    }
+    .contact-point {
+      font-family: var(--mono);
+      font-size: 12px;
+      letter-spacing: 0.14em;
+      color: var(--cyber-fg-dim);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .contact-point::before {
+      content: "▸";
+      color: var(--cyber-accent);
+    }
+
+    .contact-cta-row {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 48px;
+    }
+    .contact-cta {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      padding: 22px 36px;
+      font-family: var(--sans);
+      font-size: 15px;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-decoration: none;
+      color: var(--cyber-bg);
+      background: var(--cyber-accent);
+      border: 1px solid var(--cyber-accent);
+      transition: all 0.2s;
+      min-width: 240px;
+    }
+    .contact-cta:hover {
+      background: var(--cyber-fg);
+      border-color: var(--cyber-fg);
+      box-shadow: 0 0 32px var(--cyber-glow);
+      transform: translateY(-2px);
+    }
+    .contact-cta.ghost {
+      background: transparent;
+      color: var(--cyber-fg);
+      border: 1px solid var(--cyber-line);
+    }
+    .contact-cta.ghost:hover {
+      background: rgba(125, 240, 255, 0.06);
+      border-color: var(--cyber-accent);
+      color: var(--cyber-accent);
+      box-shadow: none;
+    }
+    .contact-cta-label {
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      opacity: 0.75;
+      font-weight: 400;
+    }
+
+    .contact-meta {
+      font-family: var(--mono);
+      font-size: 12px;
+      letter-spacing: 0.10em;
+      color: var(--cyber-fg-dim);
+      line-height: 2;
+    }
+    .contact-meta a {
+      color: var(--cyber-accent);
+      text-decoration: none;
+    }
+    .contact-meta a:hover { text-decoration: underline; }
+
+    /* ================================================
+       FOOTER
+       ================================================ */
+    .footer {
+      background: #010203;
+      color: var(--cyber-fg-dim);
+      padding: 32px 24px;
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-align: center;
+      border-top: 1px solid var(--cyber-line);
+    }
+    .footer-inner { max-width: 1080px; margin: 0 auto; }
+    .footer p { margin: 4px 0; }
+    .footer .draft { color: rgba(217, 244, 247, 0.32); }
+
+    /* ================================================
+       ANIMATIONS
+       ================================================ */
+    @keyframes scanMove {
+      0% { transform: translateY(0); }
+      100% { transform: translateY(8px); }
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(1.2); }
+    }
+    @keyframes softGlow {
+      0%, 100% { text-shadow: 0 0 16px rgba(125, 240, 255, 0.45), 0 0 32px rgba(125, 240, 255, 0.18); }
+      50% { text-shadow: 0 0 24px rgba(125, 240, 255, 0.65), 0 0 48px rgba(125, 240, 255, 0.28); }
+    }
+    @keyframes bounceY {
+      0%, 100% { transform: translateX(-50%) translateY(0); opacity: 0.7; }
+      50% { transform: translateX(-50%) translateY(6px); opacity: 1; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ========== NAV ========== -->
+<nav class="nav at-top" id="nav">
+  <div class="nav-inner">
+    <a href="#top" class="nav-logo">AI<span class="x">×</span>SA Compass</a>
+    <div class="nav-links">
+      <a href="#about">サービス</a>
+      <a href="#plans">プラン</a>
+      <a href="#subsidy">助成金</a>
+      <a href="#contact">お問い合わせ</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ========== HERO ========== -->
+<header class="hero" id="top">
+  <div class="hero-corner tl"></div>
+  <div class="hero-corner tr"></div>
+  <div class="hero-corner bl"></div>
+  <div class="hero-corner br"></div>
+
+  <div class="compass-glyph" aria-hidden="true">
+    <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <radialGradient id="cm-glow" cx="50%" cy="50%" r="50%">
+          <stop offset="0%"  stop-color="#f0f4fa" stop-opacity="0.42"/>
+          <stop offset="22%" stop-color="#d4dce8" stop-opacity="0.18"/>
+          <stop offset="55%" stop-color="#a8b2c0" stop-opacity="0.05"/>
+          <stop offset="100%" stop-color="#000000" stop-opacity="0"/>
+        </radialGradient>
+        <radialGradient id="cm-core" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="#ffffff" stop-opacity="0.95"/>
+          <stop offset="40%" stop-color="#e8eef5" stop-opacity="0.6"/>
+          <stop offset="100%" stop-color="#d4dce8" stop-opacity="0"/>
+        </radialGradient>
+      </defs>
+
+      <!-- Soft halo (the "light" feeling) -->
+      <circle cx="100" cy="100" r="98" fill="url(#cm-glow)"/>
+
+      <!-- Irregular light rays — varying length, opacity, thickness -->
+      <g stroke="#d4dce8" fill="none" stroke-linecap="round">
+        <!-- Cardinal directions (long, emphasized) -->
+        <line x1="100" y1="100" x2="100" y2="14"  stroke-width="0.7" opacity="0.78"/>
+        <line x1="100" y1="100" x2="186" y2="100" stroke-width="0.55" opacity="0.62"/>
+        <line x1="100" y1="100" x2="100" y2="186" stroke-width="0.5" opacity="0.55"/>
+        <line x1="100" y1="100" x2="14"  y2="100" stroke-width="0.55" opacity="0.62"/>
+
+        <!-- Diagonals (medium) -->
+        <line x1="100" y1="100" x2="162" y2="38"  stroke-width="0.4" opacity="0.48"/>
+        <line x1="100" y1="100" x2="162" y2="162" stroke-width="0.32" opacity="0.36"/>
+        <line x1="100" y1="100" x2="38"  y2="162" stroke-width="0.38" opacity="0.42"/>
+        <line x1="100" y1="100" x2="38"  y2="38"  stroke-width="0.42" opacity="0.5"/>
+
+        <!-- Intermediates (short, faint) -->
+        <line x1="100" y1="100" x2="138" y2="30"  stroke-width="0.28" opacity="0.30"/>
+        <line x1="100" y1="100" x2="172" y2="138" stroke-width="0.22" opacity="0.22"/>
+        <line x1="100" y1="100" x2="62"  y2="172" stroke-width="0.26" opacity="0.27"/>
+        <line x1="100" y1="100" x2="28"  y2="72"  stroke-width="0.24" opacity="0.25"/>
+        <line x1="100" y1="100" x2="74"  y2="22"  stroke-width="0.22" opacity="0.22"/>
+        <line x1="100" y1="100" x2="174" y2="76"  stroke-width="0.24" opacity="0.26"/>
+      </g>
+
+      <!-- Concentric rings — radiance -->
+      <circle cx="100" cy="100" r="32" fill="none" stroke="#c8d0d8" stroke-width="0.25" opacity="0.18"/>
+      <circle cx="100" cy="100" r="14" fill="none" stroke="#c8d0d8" stroke-width="0.4" opacity="0.40"/>
+
+      <!-- Center light source -->
+      <circle cx="100" cy="100" r="12" fill="url(#cm-core)"/>
+      <circle cx="100" cy="100" r="1.8" fill="#ffffff" opacity="0.95"/>
+    </svg>
+  </div>
+
+  <div class="hero-frame">
+    <div class="hero-topbar">
+      <span class="hero-status">SYSTEM ONLINE / READY</span>
+      <span>SAPPORO · 2026</span>
+    </div>
+
+    <div class="hero-meta">AI<span class="x">×</span>SA · DX SUBSCRIPTION SERVICE</div>
+
+    <h1 class="hero-title">Compass</h1>
+
+    <p class="hero-sub-en">Your DX Compass for Small &amp; Medium Enterprises</p>
+
+    <p class="hero-tagline">
+      「何から始めればいいか分からない」を、<br>
+      <strong>月額固定の伴走</strong>に変える。
+    </p>
+
+    <div class="hero-divider"></div>
+
+    <div class="hero-pitch">
+      <div class="hero-pitch-item">
+        <b>FREE</b>
+        <span>ご相談・お見積もりは無料</span>
+      </div>
+      <div class="hero-pitch-item">
+        <b>MONTHLY</b>
+        <span>月単位の契約 / 解約自由</span>
+      </div>
+      <div class="hero-pitch-item">
+        <b>SUBSIDY</b>
+        <span>助成金活用で実質負担を軽減</span>
+      </div>
+    </div>
+
+    <div class="hero-cta-row">
+      <a href="#contact" class="hero-cta">▸ 無料相談のお申し込み</a>
+      <a href="#plans" class="hero-cta ghost">プランを見る</a>
+    </div>
+  </div>
+
+  <div class="scroll-hint">SCROLL</div>
+</header>
+
+<!-- ========== INTRO — 3つのお伝えしたいこと ========== -->
+<section class="intro" id="about">
+  <div class="container">
+    <p class="section-label">FIRST OF ALL</p>
+    <h2 class="section-title">最初にお伝えしたい、3つのこと</h2>
+    <p class="section-lead">
+      料金プランの詳細をご覧いただく前に。私たちのスタンスを最初にお伝えします。
+    </p>
+
+    <div class="intro-grid">
+      <div class="intro-card">
+        <div class="intro-num">01</div>
+        <h3>ご相談・お見積もりは無料です</h3>
+        <p>まずは現在の業務状況やお悩みをお聞かせください。お話を伺った上で、本サービスがお客様の状況に適しているかを率直にお伝えします。ご契約に至らなくても、ご相談だけで終わって構いません。</p>
+      </div>
+      <div class="intro-card">
+        <div class="intro-num">02</div>
+        <h3>月額金額は「内容次第」で変動します</h3>
+        <p>記載の金額は標準プランの定価です。より軽いプランで十分なケースもあれば、追加枠が必要なケースもあります。助成金活用で実質的な負担が大きく下がるケースも多くあります。「サービスありき」ではなく「お客様の課題ありき」で組み立てます。</p>
+      </div>
+      <div class="intro-card">
+        <div class="intro-num">03</div>
+        <h3>月単位の契約・解約自由です</h3>
+        <p>長期契約や違約金はありません。翌月の契約継続・解約はいつでもご判断いただけます。「合わない」と感じられた時点で、お気軽にお伝えください。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== PRINCIPLES — 私たちの考え方 ========== -->
+<section class="principles">
+  <div class="container">
+    <p class="section-label">OUR PRINCIPLES</p>
+    <h2 class="section-title">私たちの考え方</h2>
+    <p class="section-lead">
+      「AIやDXが大切なのは分かっている。でも、何から始めればいいか分からない」 — そんな中小企業様に、月額固定のサブスクリプションで伴走します。専任スタッフが業務を理解した上で、世界中で実績のあるツール(ChatGPT、Zapier、Make、Google Workspace、Notion、freee等)を組み合わせ、低コストで確実な業務改善を実現します。
+    </p>
+
+    <div class="principles-list">
+      <div class="principle-item">
+        <h4>「丸投げ」で終わらせない</h4>
+        <p>代行は大切ですが、社内に何も残らない「外注依存」は健全ではありません。段階的にお客様自身がDX運用を回せるように設計し、必要な支援は徐々に「保守だけ」に縮小していくのが理想です。</p>
+      </div>
+      <div class="principle-item">
+        <h4>「合わない」ことを正直にお伝えします</h4>
+        <p>ご相談を伺った上で、本サービスがお客様の課題解決に最適でないと判断した場合は、率直にその旨をお伝えします。他のソリューションをご紹介することもあります。</p>
+      </div>
+      <div class="principle-item">
+        <h4>業務理解を最優先にします</h4>
+        <p>ツールありきの提案はしません。まずお客様の業務を理解し、本当にその業務にAI/DXが必要かを一緒に検討するところから始めます。</p>
+      </div>
+      <div class="principle-item">
+        <h4>システム開発はしません</h4>
+        <p>既に世界中で実績のあるツールを組み合わせることで、低コストで確実な改善を実現します。「車輪の再発明」をせず、お客様の本業に集中できる環境を整えます。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== PLANS ========== -->
+<section class="plans" id="plans">
+  <div class="container">
+    <p class="section-label">PRICING PLANS</p>
+    <h2 class="section-title">3つのプラン</h2>
+    <p class="section-lead">
+      お客様の状況に合わせて選択でき、契約後もプラン変更が可能です。月額金額は標準プランの定価で、実際の提案では業務状況に応じて前後します。
+    </p>
+
+    <div class="plans-grid">
+      <!-- Light -->
+      <div class="plan-card">
+        <p class="plan-name">LIGHT</p>
+        <p class="plan-tagline">既にDX運用が回っている方向け。保守運用に特化したプラン。</p>
+        <div class="plan-price">
+          <span class="plan-price-num">200,000</span>
+          <span class="plan-price-unit">円 / 月</span>
+        </div>
+        <div class="plan-price-tax">税抜・月実働10時間</div>
+        <div class="plan-subsidy empty"><span>&nbsp;</span></div>
+        <ul class="plan-features">
+          <li>既導入ツールの運用保守</li>
+          <li>軽微な改善対応(月10時間内)</li>
+          <li>月次レポート(稼働状況)</li>
+          <li>月1回MTG / チャット随時相談</li>
+          <li class="disabled">課題ヒアリング・改善提案</li>
+          <li class="disabled">ツール導入・設定代行</li>
+          <li class="disabled">社員向け訓練・伴走研修</li>
+          <li class="disabled">助成金活用</li>
+        </ul>
+        <a href="#contact" class="plan-cta">このプランで相談する</a>
+      </div>
+
+      <!-- Standard (featured) -->
+      <div class="plan-card featured">
+        <p class="plan-name">STANDARD</p>
+        <p class="plan-tagline">AI/DXに本格的に取り組み始めたい方へ。最も選ばれているプラン。</p>
+        <div class="plan-price">
+          <span class="plan-price-num">300,000</span>
+          <span class="plan-price-unit">円 / 月</span>
+        </div>
+        <div class="plan-price-tax">税抜・月実働10時間</div>
+        <div class="plan-subsidy">
+          助成金活用後の実質月額(目安)
+          <b>約 172,500 円 / 月</b>
+          <small>※ 人材開発支援助成金 適用時の試算</small>
+        </div>
+        <ul class="plan-features">
+          <li>課題ヒアリング・業務フロー棚卸</li>
+          <li>AI/ITツールの選定と導入設定</li>
+          <li>運用保守(メンテ・トラブル対応)</li>
+          <li>社員向け訓練(月3時間×5名想定)</li>
+          <li>月次レポート(KPI測定・改善提案)</li>
+          <li>隔週MTG(30分)/ チャット随時相談</li>
+          <li>助成金活用 + 申請書類作成サポート</li>
+          <li class="disabled">自社AIアプリによるデータ分析</li>
+        </ul>
+        <a href="#contact" class="plan-cta">このプランで相談する</a>
+      </div>
+
+      <!-- Premium -->
+      <div class="plan-card">
+        <p class="plan-name">PREMIUM</p>
+        <p class="plan-tagline">業務データを活用し、機械学習を経営判断に組み込みたい方へ。</p>
+        <div class="plan-price">
+          <span class="plan-price-num">500,000</span>
+          <span class="plan-price-unit">円 / 月</span>
+        </div>
+        <div class="plan-price-tax">税抜・月実働10時間</div>
+        <div class="plan-subsidy">
+          助成金活用後の実質月額(目安)
+          <b>約 287,500 円 / 月</b>
+          <small>※ 人材開発支援助成金 適用時の試算</small>
+        </div>
+        <ul class="plan-features">
+          <li>Standardプランの全内容</li>
+          <li>自社開発AIアプリによるデータ分析(月最大4回)</li>
+          <li>分析結果の読み解き研修</li>
+          <li>業種別DXロードマップ研修</li>
+          <li>売上予測・需要予測・異常検知 等</li>
+          <li>助成金活用 + 申請書類作成サポート</li>
+          <li class="disabled">※ 初期セットアップに1〜2ヶ月</li>
+          <li class="disabled">&nbsp;</li>
+        </ul>
+        <a href="#contact" class="plan-cta">このプランで相談する</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== SUBSIDY ========== -->
+<section id="subsidy" style="padding-top: 0;">
+  <div class="container">
+    <div class="subsidy-note">
+      <b>助成金スキームについて</b><br>
+      当サービスでは、厚生労働省「人材開発支援助成金 事業展開等リスキリング支援コース」(中小企業向け)の活用を前提として、サービス内容を設計しています。経費助成は訓練に係る費用の最大75%、賃金助成は1人1時間あたり1,000円(2026年4月時点・中小企業)。<br><br>
+      <b>ご注意:</b> 助成金は事後申請です。月額料金は毎月「定価」でお支払いいただき、訓練終了後に申請・審査を経て入金されます(入金まで3〜6ヶ月程度)。受給は労働局の審査によるため、当社は最大限のサポートをしますが受給を保証するものではありません。本助成金は令和8年度末(2027年3月31日)までの時限措置です。
+    </div>
+  </div>
+</section>
+
+<!-- ========== CONTACT ========== -->
+<section class="contact" id="contact">
+  <div class="contact-inner">
+    <p class="section-label">GET IN TOUCH</p>
+    <h2 class="section-title">まずは、お話だけでも。</h2>
+    <p class="section-lead">
+      Zoom会議(60〜90分)にて、現状の業務状況やお悩みをヒアリングします。費用は一切かかりません。ご契約の有無に関わらず、率直なアドバイスをお伝えします。
+    </p>
+
+    <div class="contact-points">
+      <span class="contact-point">ご相談・お見積もり無料</span>
+      <span class="contact-point">所要時間 60〜90分</span>
+      <span class="contact-point">Zoomで全国対応</span>
+    </div>
+
+    <div class="contact-cta-row">
+      <a href="https://forms.gle/your-form-id" class="contact-cta" target="_blank" rel="noopener">
+        <span class="contact-cta-label">FORM</span>
+        フォームから問い合わせ
+      </a>
+      <a href="mailto:contact@example.com?subject=AIxSA%20Compass%20ご相談&body=会社名:%0A担当者名:%0Aご相談内容:%0A" class="contact-cta ghost">
+        <span class="contact-cta-label">EMAIL</span>
+        メールで問い合わせ
+      </a>
+    </div>
+
+    <div class="contact-meta">
+      <p>メール: <a href="mailto:contact@example.com">contact@example.com</a></p>
+      <p>受付時間: 平日 10:00 〜 18:00</p>
+    </div>
+  </div>
+</section>
+
+<!-- ========== FOOTER ========== -->
+<footer class="footer">
+  <div class="footer-inner">
+    <p>AI<span style="color: var(--cyber-accent);">×</span>SA Compass / DX伴走サブスクリプション</p>
+    <p class="draft">© 2026 AIxSA Compass. 記載内容は 2026年5月時点のものです。助成金制度は変更される可能性があります。</p>
+  </div>
+</footer>
+
+<!-- ========== JS ========== -->
+<script>
+  // Nav style switching based on scroll position
+  (function() {
+    const nav = document.getElementById('nav');
+    const hero = document.getElementById('top');
+    if (!nav || !hero) return;
+
+    function update() {
+      const heroBottom = hero.getBoundingClientRect().bottom;
+      if (heroBottom > 80) {
+        nav.classList.add('at-top');
+      } else {
+        nav.classList.remove('at-top');
+      }
+    }
+    window.addEventListener('scroll', update, { passive: true });
+    update();
+  })();
+</script>
+
+</body>
+</html>
